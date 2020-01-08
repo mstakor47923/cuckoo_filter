@@ -26,7 +26,6 @@ int main(int argc, char *argv[]) {
 	uint32_t fingerprintSize = 8;
 	uint32_t maxNumberOfKicks =500;
 
-
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
 	cuckoo::CuckooFilter* fltr = new cuckoo::CuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
