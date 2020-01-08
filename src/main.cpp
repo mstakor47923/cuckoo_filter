@@ -23,9 +23,10 @@ int main(int argc, char *argv[]) {
 	
 	uint32_t bucketSize = 4;
 	uint32_t fingerprintSize = 8;
+	uint32_t buckets = 100;
 
-	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing();
-	cuckoo::CuckooFilter* fltr = new cuckoo::CuckooFilter(bucketSize, fingerprintSize, hashingAlg);
+	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(buckets);
+	cuckoo::CuckooFilter* fltr = new cuckoo::CuckooFilter(bucketSize, buckets, fingerprintSize, hashingAlg);
 
 	uint16_t kSize = 10;
 	uint32_t kCount = 100;

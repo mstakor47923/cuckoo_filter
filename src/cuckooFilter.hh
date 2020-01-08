@@ -17,7 +17,7 @@ namespace cuckoo {
 
 	class CuckooFilter {
 	private:
-		uint32_t _bucketSize, _fingerPrintSize;
+		uint32_t _bucketSize, _fingerPrintSize, _bucketNumber;
 		std::map<uint32_t, std::vector<uint32_t>>* _table;
 		CuckooHashing* _hashing;
 

@@ -10,9 +10,10 @@ namespace cuckoo {
 	public:
 		CuckooHashing(int maxHashNum);
 		uint32_t getHash(const uint32_t val);
-	};
+	
 	private:
 		int _maxHashNum;
+	};
 }
 
 #endif // !CUCKOO_HASHING_HH

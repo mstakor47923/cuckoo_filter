@@ -32,16 +32,16 @@ namespace cuckoo {
 	bool CuckooFilter::insert(uint32_t val)
 	{
 		uint32_t f = fingerprint(val);
-		uint32_t i1 = _hashing.getHash(val);
-		uint32_t i2 = i1 ^ _hashing.getHash(f);
-		auto bucket1 = _table.at(i1);
-		auto bucket2 = _table.at(i2);
+		uint32_t i1 = _hashing->getHash(val);
+		uint32_t i2 = i1 ^ _hashing->getHash(f);
+		auto bucket1 = _table->at(i1);
+		auto bucket2 = _table->at(i2);
 		if (bucket1.size() < _bucketSize){
-			bucket1.push(f);
+			bucket1.push_back(f);
 			return true;
 		}
 		else if (bucket2.size() < _bucketSize){
-			bucket2.push(f);
+			bucket2.push_back(f);
 			return true;
 		}
 
