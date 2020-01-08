@@ -1,0 +1,4 @@
+Sintetički podaci -> generirati i testirati na njima, dati na plot
+E.coli -> testirati i dati na plot
+finalizirati opis algoritma (anita)
+
