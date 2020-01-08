@@ -21,7 +21,10 @@ namespace cuckoo {
 
 	uint32_t CuckooFilter::lookup(std::string val)
 	{
-		fingerprint(val);
+		uint32_t f = fingerprint(val);
+		uint32_t i = _hashing->getHash(val);
+		uint32_t j = i ^ _hashing->getHash(f);
+		
 		return uint32_t();
 	}
 
