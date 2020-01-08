@@ -11,10 +11,6 @@
 
 namespace cuckoo {
 
-	namespace constants {
-		const uint32_t emptyEntry = 0;
-	}
-
 	class CuckooFilter {
 	private:
 		uint32_t _bucketSize, _fingerPrintSize, _bucketNumber;
