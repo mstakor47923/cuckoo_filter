@@ -4,11 +4,12 @@
 #include <cstdlib>
 #include <time.h>
 #include "cuckooFilter.hh"
+#include "cuckooConstants.hh"
 
 namespace cuckoo {
 	
-	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, CuckooHashing* hashingAlg)
-		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize) {
+	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg)
+		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 		_table = new std::map<uint32_t, std::vector<uint32_t>>();
 		_hashing = hashingAlg;
 		srand(time(NULL));
@@ -49,9 +50,9 @@ namespace cuckoo {
 			return true;
 		}
 
-		
+		uint32_t i = rand()%2 ? i2 : i1;
+		//for (uint32_t n=0; n < cuckoo::constants::maxNumberOfKicks)
 
-		
 		return false;
 	}
 
