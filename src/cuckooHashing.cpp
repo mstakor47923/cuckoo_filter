@@ -2,13 +2,13 @@
 
 namespace cuckoo {
 	
-	CuckooHashing::CuckooHashing()
+	CuckooHashing::CuckooHashing(int maxHashNum): _maxHashNum(maxHashNum)
 	{
 	}
 
 	uint32_t CuckooHashing::getHash(const uint32_t val)
 	{
-		return 0;
+		return val*50 % _maxHashNum;
 	}
 
 }
