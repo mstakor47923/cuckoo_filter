@@ -11,18 +11,14 @@
 
 namespace cuckoo {
 
-	namespace constants {
-		const uint32_t emptyEntry = 0;
-	}
-
 	class CuckooFilter {
 	private:
-		uint32_t _bucketSize, _fingerPrintSize, _bucketNumber;
+		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
 		std::map<uint32_t, std::vector<uint32_t>>* _table;
 		CuckooHashing* _hashing;
 
 	public:
-		CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, CuckooHashing* hashingAlg);
+		CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg);
 		~CuckooFilter();
 
 		bool lookup(std::string val);
