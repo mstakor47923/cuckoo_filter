@@ -18,7 +18,7 @@ namespace cuckoo {
 		CuckooHashing* _hashing;
 
 	public:
-		CuckooFilter(uint32_t bucketSize, uint32_t fingerPrintSize, CuckooHashing* hashingAlg);
+		CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, CuckooHashing* hashingAlg);
 		~CuckooFilter();
 
 		uint32_t lookup(uint32_t val);

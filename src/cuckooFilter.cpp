@@ -5,8 +5,8 @@
 
 namespace cuckoo {
 	
-	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t fingerPrintSize, CuckooHashing* hashingAlg)
-		: _bucketSize(bucketSize), _fingerPrintSize(fingerPrintSize) {
+	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, CuckooHashing* hashingAlg)
+		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize) {
 		_table = new std::map<uint32_t, std::vector<uint32_t>>();
 		_hashing = hashingAlg;
 	}
