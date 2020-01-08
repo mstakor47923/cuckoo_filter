@@ -20,20 +20,55 @@ namespace cuckoo {
 
 	CuckooFilter::~CuckooFilter()
 	{
+		for (uint32_t i =0; i< _bucketNumber; ++i)
+			delete _table->at(i);
 		delete _table;
 	}
 
-	uint32_t CuckooFilter::lookup(std::string val)
+	bool CuckooFilter::lookup(std::string val)
 	{
 		uint32_t f = fingerprint(val);
 		uint32_t i = _hashing->getHash(val);
 		uint32_t j = i ^ _hashing->getHash(f);
-		
-		return uint32_t();
+
+		auto bucket_i = _table->find(i);
+		auto bucket_j = _table->find(j);
+
+		if (bucket_i != _table->end() && 
+			std::find(bucket_i->second->begin(), bucket_i->second->end(), f) != bucket_i->second->end()) {
+			return true;
+		}
+		else if (bucket_j != _table->end() && 
+				 std::find(bucket_j->second->begin(), bucket_j->second->end(), f) != bucket_j->second->end()) {
+			return true;
+		} else {
+			return false;
+		}
+		return false;
 	}
 
 	bool CuckooFilter::remove(std::string val)
 	{
+		uint32_t f = fingerprint(val);
+		uint32_t i = _hashing->getHash(val);
+		uint32_t j = i ^ _hashing->getHash(f);
+
+		auto bucket_i = _table->find(i);
+		auto bucket_j = _table->find(j);
+
+		if (bucket_i != _table->end() && 
+			std::find(bucket_i->second->begin(), bucket_i->second->end(), f) != bucket_i->second->end()) {
+			bucket_i->second->erase(std::remove(bucket_i->second->begin(), bucket_i->second->end(), f), bucket_i->second->end());
+			return true;
+		}
+		else if (bucket_j != _table->end() && 
+				 std::find(bucket_j->second->begin(), bucket_j->second->end(), f) != bucket_j->second->end()) {
+			bucket_j->second->erase(std::remove(bucket_j->second->begin(), bucket_j->second->end(), f), bucket_j->second->end());
+			return true;
+		} else {
+			return false;
+		}
+
 		return false;
 	}
 
