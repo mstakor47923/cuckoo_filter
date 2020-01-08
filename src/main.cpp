@@ -22,11 +22,13 @@ int main(int argc, char *argv[]) {
 	}
 	
 	uint32_t bucketSize = 4;
+	uint32_t bucketNumber = 5000;
 	uint32_t fingerprintSize = 8;
-	uint32_t buckets = 100;
+	uint32_t maxNumberOfKicks =500;
 
-	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(buckets);
-	cuckoo::CuckooFilter* fltr = new cuckoo::CuckooFilter(bucketSize, buckets, fingerprintSize, hashingAlg);
+
+	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
+	cuckoo::CuckooFilter* fltr = new cuckoo::CuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
 	uint16_t kSize = 10;
 	uint32_t kCount = 100;
