@@ -19,13 +19,25 @@ namespace cuckoo {
 		delete _table;
 	}
 
-	uint32_t CuckooFilter::lookup(std::string val)
+	bool CuckooFilter::lookup(std::string val)
 	{
 		uint32_t f = fingerprint(val);
 		uint32_t i = _hashing->getHash(val);
 		uint32_t j = i ^ _hashing->getHash(f);
-		
-		return uint32_t();
+
+		auto bucket_i = _table->find(i);
+		auto bucket_j = _table->find(j);
+
+		if (bucket_i != _table->end() && 
+			std::find(bucket_i->second.begin(), bucket_i->second.end(), val) != bucket_i->second.end()) {
+			return true;
+		}
+		else if (bucket_j != _table->end() && 
+				 std::find(bucket_j->second.begin(), bucket_j->second.end(), val) != bucket_j->second.end()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	bool CuckooFilter::remove(std::string val)
