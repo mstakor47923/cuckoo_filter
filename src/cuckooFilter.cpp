@@ -3,6 +3,8 @@
 #include <map>
 #include <cstdlib>
 #include <time.h>
+#include <functional>
+
 #include "cuckooFilter.hh"
 #include "cuckooConstants.hh"
 
@@ -11,7 +13,7 @@ namespace cuckoo {
 	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg)
 		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 		_table = new std::map<uint32_t, std::vector<uint32_t>*>();
-		for (uint32_t i =0; i< bucketNumber; ++i){
+		for (uint32_t i = 0; i < _bucketNumber; i++) {
 			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i, new std::vector<uint32_t>()));
 		}
 		_hashing = hashingAlg;
@@ -77,38 +79,49 @@ namespace cuckoo {
 		uint32_t f = fingerprint(val);
 		uint32_t i1 = _hashing->getHash(val);
 		uint32_t i2 = i1 ^ _hashing->getHash(f);
-		auto bucket1 = _table->at(i1);
-		auto bucket2 = _table->at(i2);
-		if (bucket1->size() < _bucketSize){
-			bucket1->push_back(f);
+
+		auto bucket1 = _table->find(i1);
+		auto bucket2 = _table->find(i2);
+
+		if (bucket1 == _table->end()) {
+			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i1, new std::vector<uint32_t>()));
+			bucket1 = _table->find(i1);
+		}
+		if (bucket2 == _table->end()) {
+			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i2, new std::vector<uint32_t>()));
+			bucket2 = _table->find(i2);
+		}
+
+		if (bucket1->second->size() < _bucketSize){
+			bucket1->second->push_back(f);
 			return true;
 		}
-		else if (bucket2->size() < _bucketSize){
-			bucket2->push_back(f);
+		else if (bucket2->second->size() < _bucketSize){
+			bucket2->second->push_back(f);
 			return true;
 		}
 
-		auto i = rand()%2 ? i2 : i1;
+		auto i = rand() % 2 ? i2 : i1;
 
-		for (uint32_t n=0; n < _maxNumberOfKicks; n++){
-			auto bucket = _table->at(i);
-			uint32_t randIndex = rand() % _bucketSize;
-			auto temp = bucket->at(randIndex);
-			bucket->at(randIndex) = f;
+		for (uint32_t n = 0; n < _maxNumberOfKicks; n++){
+			auto bucket = _table->find(i);
+			uint32_t randIndex = rand() % bucket->second->size();
+			auto temp = bucket->second->at(randIndex);
+			bucket->second->at(randIndex) = f;
 			f = temp;
 			i = i ^ _hashing->getHash(f);
-			bucket = _table->at(i);
-			if (bucket->size() < _bucketSize){
-				bucket->push_back(f);
+			bucket = _table->find(i);
+			if (bucket != _table->end() && bucket->second->size() < _bucketSize){
+				bucket->second->push_back(f);
 				return true;
 			}
 		}
+
 		return false;
 	}
 
-	uint32_t CuckooFilter::fingerprint(std::string val)
-	{
-		return 0;
+	uint32_t CuckooFilter::fingerprint(std::string val) {
+		return hasher(val);
 	}
 
 }

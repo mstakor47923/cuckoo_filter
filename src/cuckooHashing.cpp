@@ -6,13 +6,11 @@ namespace cuckoo {
 	{
 	}
 
-	uint32_t CuckooHashing::getHash(const std::string& val)
-	{
-		return val.length() * 50 % _maxHashNum;
+	uint32_t CuckooHashing::getHash(const std::string& val) {
+		return hasher(val) % (_maxHashNum + 1);
 	}
 
-	uint32_t CuckooHashing::getHash(const uint32_t val)
-	{
-		return val * 50 % _maxHashNum;
+	uint32_t CuckooHashing::getHash(const uint32_t val) {
+		return val % _maxHashNum;
 	}
 }

@@ -22,17 +22,26 @@ int main(int argc, char *argv[]) {
 	}
 	
 	uint32_t bucketSize = 4;
-	uint32_t bucketNumber = 5000;
+	uint32_t bucketNumber = 500;
 	uint32_t fingerprintSize = 8;
-	uint32_t maxNumberOfKicks =500;
+	uint32_t maxNumberOfKicks = 500;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
 	cuckoo::CuckooFilter* fltr = new cuckoo::CuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
 	uint16_t kSize = 10;
-	uint32_t kCount = 100;
+	uint32_t kCount = 10000;
 	std::vector<std::string>* kmers = cuckoo::DataLoader::loadFromFile(argv[1], kSize, kCount);
 
+	for (auto it = kmers->begin(); it != kmers->end(); it++) {
+		bool success = fltr->insert(*it);
+		if (!success) break;
+	}
+
+	std::cout << fltr->lookup("GTAAGTATTT") << std::endl;
+	std::cout << fltr->lookup("CAGCTTTTCA") << std::endl;
+	std::cout << fltr->lookup("CAGCETTTCA") << std::endl;
+	
 	delete fltr;
     return 0;
 }

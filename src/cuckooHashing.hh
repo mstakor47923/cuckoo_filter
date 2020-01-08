@@ -12,6 +12,7 @@ namespace cuckoo {
 		uint32_t getHash(const std::string& val);
 		uint32_t getHash(const uint32_t val);
 	private:
+		std::hash<std::string> hasher;
 		int _maxHashNum;
 	};
 }
