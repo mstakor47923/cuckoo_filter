@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <stdint.h>
 
 #include "cuckooHashing.hh"
 

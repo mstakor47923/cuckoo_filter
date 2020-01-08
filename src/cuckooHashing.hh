@@ -2,6 +2,7 @@
 #define CUCKOO_HASHING_HH
 
 #include <iostream>
+#include <stdint.h>
 
 namespace cuckoo {
 
