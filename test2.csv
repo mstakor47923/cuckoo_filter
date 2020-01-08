@@ -1,0 +1,5 @@
+bucketNumber, timeOfExec(milis),memoryUsed(kB),fpRate(percent)
+400,123,1028312,91
+800,150,1523124,93
+1600,110,19528312,94
+3200,100,223124,95
