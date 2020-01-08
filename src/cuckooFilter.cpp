@@ -20,6 +20,8 @@ namespace cuckoo {
 
 	CuckooFilter::~CuckooFilter()
 	{
+		for (uint32_t i =0; i< _bucketNumber; ++i)
+			delete _table->at(i);
 		delete _table;
 	}
 
