@@ -19,17 +19,18 @@ namespace cuckoo {
 		delete _table;
 	}
 
-	uint32_t CuckooFilter::lookup(uint32_t val)
+	uint32_t CuckooFilter::lookup(std::string val)
 	{
+		fingerprint(val);
 		return uint32_t();
 	}
 
-	bool CuckooFilter::remove(uint32_t val)
+	bool CuckooFilter::remove(std::string val)
 	{
 		return false;
 	}
 
-	bool CuckooFilter::insert(uint32_t val)
+	bool CuckooFilter::insert(std::string val)
 	{
 		uint32_t f = fingerprint(val);
 		uint32_t i1 = _hashing->getHash(val);
@@ -51,7 +52,7 @@ namespace cuckoo {
 		return false;
 	}
 
-	uint32_t CuckooFilter::fingerprint(uint32_t val)
+	uint32_t CuckooFilter::fingerprint(std::string val)
 	{
 		return 0;
 	}

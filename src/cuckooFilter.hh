@@ -25,12 +25,12 @@ namespace cuckoo {
 		CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, CuckooHashing* hashingAlg);
 		~CuckooFilter();
 
-		uint32_t lookup(uint32_t val);
-		bool remove(uint32_t val);
-		bool insert(uint32_t val);
+		uint32_t lookup(std::string val);
+		bool remove(std::string val);
+		bool insert(std::string val);
 
 	private:
-		uint32_t fingerprint(uint32_t val);
+		uint32_t fingerprint(std::string val);
 	};
 }
 
