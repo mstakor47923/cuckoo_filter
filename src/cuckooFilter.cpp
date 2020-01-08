@@ -33,11 +33,11 @@ namespace cuckoo {
 		auto bucket_j = _table->find(j);
 
 		if (bucket_i != _table->end() && 
-			std::find(bucket_i->second.begin(), bucket_i->second.end(), f) != bucket_i->second.end()) {
+			std::find(bucket_i->second->begin(), bucket_i->second->end(), f) != bucket_i->second->end()) {
 			return true;
 		}
 		else if (bucket_j != _table->end() && 
-				 std::find(bucket_j->second.begin(), bucket_j->second.end(), f) != bucket_j->second.end()) {
+				 std::find(bucket_j->second->begin(), bucket_j->second->end(), f) != bucket_j->second->end()) {
 			return true;
 		} else {
 			return false;
@@ -55,13 +55,13 @@ namespace cuckoo {
 		auto bucket_j = _table->find(j);
 
 		if (bucket_i != _table->end() && 
-			std::find(bucket_i->second.begin(), bucket_i->second.end(), f) != bucket_i->second.end()) {
-			bucket_i->second.erase(std::remove(bucket_i->second.begin(), bucket_i->second.end(), f), bucket_i->second.end());
+			std::find(bucket_i->second->begin(), bucket_i->second->end(), f) != bucket_i->second->end()) {
+			bucket_i->second->erase(std::remove(bucket_i->second->begin(), bucket_i->second->end(), f), bucket_i->second->end());
 			return true;
 		}
 		else if (bucket_j != _table->end() && 
-				 std::find(bucket_j->second.begin(), bucket_j->second.end(), f) != bucket_j->second.end()) {
-			bucket_j->second.erase(std::remove(bucket_j->second.begin(), bucket_j->second.end(), f), bucket_j->second.end());
+				 std::find(bucket_j->second->begin(), bucket_j->second->end(), f) != bucket_j->second->end()) {
+			bucket_j->second->erase(std::remove(bucket_j->second->begin(), bucket_j->second->end(), f), bucket_j->second->end());
 			return true;
 		} else {
 			return false;
