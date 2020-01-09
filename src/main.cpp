@@ -1,9 +1,6 @@
 #include <iostream>
-#include <stdint.h>
-#include <fstream>
 #include <sstream>
-#include <utility>
-#include <memory>
+#include <chrono>
 
 #include "cuckooFilter.hh"
 #include "cuckooHashing.hh"
@@ -26,7 +23,7 @@ std::vector<std::string> generateTestFiles(const std::string& fromfile, const st
 int main(int argc, char *argv[]) {
 
 	if (argc < 2) {
-		std::cout << "Provide input file" << std::endl;
+		std::cout << "Usage: cuckoo_filter [path_to_genome_file]" << std::endl;
 		return 1;
 	}
 	
@@ -47,13 +44,19 @@ int main(int argc, char *argv[]) {
 
 	uint16_t kSize = 10;
 	uint32_t kCount = 10000;
-	std::vector<std::string>* kmers = cuckoo::DataLoader::loadFromFile(argv[1], kSize, kCount);
+	auto kmers = cuckoo::DataLoader::loadFromFile(argv[1], kSize, kCount);
 
+	auto start = std::chrono::system_clock::now();
 	for (auto it = kmers->begin(); it != kmers->end(); it++) {
 		bool success = fltr->insert(*it);
 		if (!success) break;
 	}
-	
+	auto end = std::chrono::system_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Insert duration: " << elapsed.count() << "ms" << std::endl;
+
 	delete fltr;
+	delete hashingAlg;
+	delete kmers;
     return 0;
 }
