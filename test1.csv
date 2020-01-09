@@ -1,0 +1,5 @@
+bucketSize, timeOfExec(milis),memoryUsed(kB),fpRate(percent)
+4,123,1028312,91
+8,150,1523124,93
+16,110,19528312,94
+32,100,223124,95
