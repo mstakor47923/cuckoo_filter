@@ -1,6 +1,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include <algorithm>
 
 namespace cuckoo {
@@ -41,6 +42,35 @@ namespace cuckoo {
             file.close();
             kmers->shrink_to_fit();
             return kmers;
+        }
+
+        static std::vector<std::string>* loadKmersFromFile(std::string filename) {
+            std::ifstream file(filename, std::ifstream::in);
+            if (file.is_open()) {
+                std::string kmer;
+                std::vector<std::string>* kmers = new std::vector<std::string>();
+                while(file >> kmer) {
+                    kmer.erase(std::remove(kmer.begin(), kmer.end(), '\n'), kmer.end());
+                    kmers->push_back(kmer);
+                }
+
+                file.close();
+                return kmers;
+            } else {
+                std::cout << "Error in opening file..!!" << std::endl;
+                return nullptr;
+            }
+        }
+
+        static void saveKmersToFile(std::string filepath, const std::vector<std::string>* kmers) {
+            std::ofstream file(filepath, std::ofstream::out);
+            if (file.is_open()) {
+                for (auto it = kmers->begin(); it != kmers->end(); it++) {
+                    file << *it << std::endl;
+                }
+
+                file.close();
+            }
         }
     };
 }

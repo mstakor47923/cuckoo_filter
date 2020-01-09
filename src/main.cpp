@@ -1,11 +1,27 @@
 #include <iostream>
 #include <stdint.h>
 #include <fstream>
+#include <sstream>
+#include <utility>
 #include <memory>
 
 #include "cuckooFilter.hh"
 #include "cuckooHashing.hh"
 #include "dataLoader.hh"
+
+std::vector<std::string> generateTestFiles(const std::string& fromfile, const std::vector<std::pair<uint32_t, uint32_t>>& fileGenInfo) {
+	std::vector<std::string> filePaths;
+	for (auto it = fileGenInfo.begin(); it != fileGenInfo.end(); it++) {
+		std::vector<std::string>* kmers = cuckoo::DataLoader::loadFromFile(fromfile, it->first, it->second);
+		std::stringstream ss;
+		ss << "/mnt/c/Users/mateo/Desktop/cuckoo-filter/" << it->first << "mer-" << it->second << ".txt";
+		cuckoo::DataLoader::saveKmersToFile(ss.str(), kmers);
+
+		filePaths.push_back(ss.str());
+	}
+
+	return filePaths;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -13,14 +29,14 @@ int main(int argc, char *argv[]) {
 		std::cout << "Provide input file" << std::endl;
 		return 1;
 	}
-
-	std::ifstream file (argv[1], std::ifstream::binary);
-	if(!file)
-	{
-		std::cout << "Error in opening file..!!" << std::endl;
-		std::exit(1);
-	}
 	
+	// ------ for generating test files ------
+	// std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
+	// 	std::make_pair(100, 10000), 
+	// 	std::make_pair(50, 10000)
+	// };
+	// generateTestFiles(argv[1], fileGenInfo);
+
 	uint32_t bucketSize = 4;
 	uint32_t bucketNumber = 500;
 	uint32_t fingerprintSize = 8;
@@ -37,10 +53,6 @@ int main(int argc, char *argv[]) {
 		bool success = fltr->insert(*it);
 		if (!success) break;
 	}
-
-	std::cout << fltr->lookup("GTAAGTATTT") << std::endl;
-	std::cout << fltr->lookup("CAGCTTTTCA") << std::endl;
-	std::cout << fltr->lookup("CAGCETTTCA") << std::endl;
 	
 	delete fltr;
     return 0;
