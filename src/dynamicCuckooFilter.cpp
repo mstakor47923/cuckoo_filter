@@ -16,7 +16,7 @@ namespace cuckoo {
 		_hashing = hashingAlg;
 
 		std::vector<CuckooFilter*>* cuckooFilters = new std::vector<CuckooFilter*>();
-		cuckooFilters->push_back(new CuckooFilter(bucketSize, bucketNumber, fingerPrintSize, maxNumberOfKicks, hashingAlg));
+		cuckooFilters->push_back(new CuckooFilter(_bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks, _hashing));
 
 		srand(time(NULL));
 	}
@@ -42,6 +42,11 @@ namespace cuckoo {
 
 	bool DynamicCuckooFilter::insert(std::string val)
 	{
-		
+		CuckooFilter* currentCuckooFilter = cuckooFilters->back();
+		bool success = currentCuckooFilter->insert(val);
+		if (!success) {
+			cuckooFilters->push_back(new CuckooFilter(_bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks, _hashing));
+			return cuckooFilters->back()->insert(val);
+		}
 	}
 }

@@ -27,7 +27,7 @@ namespace cuckoo {
 		delete _table;
 	}
 
-	bool CuckooFilter::lookup(std::string val)
+	bool CuckooFilter::lookup(std::string val) 
 	{
 		uint32_t f = fingerprint(val);
 		uint32_t i = _hashing->getHash(val);

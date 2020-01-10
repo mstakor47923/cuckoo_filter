@@ -12,7 +12,7 @@
 
 namespace cuckoo {
 
-	class DynamicCuckooFilter {
+	class DynamicCuckooFilter : public Filter {
 	private:
 		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
 		std::vector<CuckooFilter*>* cuckooFilters;
@@ -25,10 +25,9 @@ namespace cuckoo {
 			CuckooHashing* hashingAlg);
 		~DynamicCuckooFilter();
 
-		bool lookup(std::string val);
-		bool remove(std::string val);
-		bool insert(std::string val);
-
+		virtual bool lookup(std::string val);
+		virtual bool remove(std::string val);
+		virtual bool insert(std::string val);
 	private:
 		uint32_t fingerprint(std::string val);
 	};
