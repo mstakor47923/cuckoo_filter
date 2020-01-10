@@ -8,6 +8,8 @@
 #include "dataLoader.hh"
 #include <stdlib.h>
 #include <time.h>
+#include <chrono>
+#include "filter.hh"
 
 std::vector<std::string> generateTestFiles(const std::string& fromfile, const std::vector<std::pair<uint32_t, uint32_t>>& fileGenInfo) {
 	std::vector<std::string> filePaths;
@@ -76,4 +78,49 @@ bool outputStats(
 				 << std::endl;
 			file.close();
 		}
+	return true;
+}
+
+bool benchmarkFilter(
+		const std::string inputFile,
+		const std::string outputFile,
+		cuckoo::Filter *fltr,
+		int numberOfTestKmers = 1000
+		){
+	auto start = std::chrono::system_clock::now();
+	auto kmers = cuckoo::DataLoader::loadKmersFromFile(inputFile);
+	auto end = std::chrono::system_clock::now();
+	auto elapsedForLoading = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Loading duration: " << elapsedForLoading.count() << "ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
+	auto mutatedKmers = generateNeKmers(numberOfTestKmers, kmers);
+	end = std::chrono::system_clock::now();
+	auto elapsedForGeneratingNeKmers = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Generate non existing Kmers duration: " << elapsedForGeneratingNeKmers.count() << "ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
+	for (auto it = kmers->begin(); it != kmers->end(); it++) {
+		bool success = fltr->insert(*it);
+		//if (!success) break;
+	}
+	end = std::chrono::system_clock::now();
+	auto elapsedForInsert = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Insert duration: " << elapsedForInsert.count() << "ms" << std::endl;
+
+	int fp(0);
+	for (auto it = mutatedKmers->begin(); it != mutatedKmers->end(); ++it){
+		if (fltr->lookup(*it)){
+			//std::cout << "False positive: " << *it  << std::endl;
+			++fp;
+		}
+	}
+	std::cout << "Fp rate: " << (float)fp/numberOfTestKmers << std::endl;
+	std::cout << "Memory taken " << (double)(fltr->getCalculatedMemoryUsage() / 1024) << " kB" << std::endl;
+
+	outputStats("data.csv", 10, 100, elapsedForInsert.count(), -1, (float)fp/numberOfTestKmers);
+
+	delete kmers;
+
+	return true;
 }

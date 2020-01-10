@@ -22,4 +22,12 @@ bool outputStats(
     uint64_t memoryUsed,
     float fpRate);
 
+
+bool benchmarkFilter(
+		const std::string inputFile,
+		const std::string outputFile,
+		cuckoo::Filter *fltr,
+		int numberOfTestKmers = 1000
+		);
+
 #endif // !TESTING_SUITE_HH
