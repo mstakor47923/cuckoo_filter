@@ -53,17 +53,28 @@ int main(int argc, char *argv[]) {
 
 	uint16_t kSize = 100;
 	uint32_t kCount = 10000;
-	auto kmers = cuckoo::DataLoader::loadKmersFromFile(argv[1]);
-	auto mutatedKmers = generateNeKmers(numberOfTestKmers, kmers);
-
 
 	auto start = std::chrono::system_clock::now();
+
+	auto kmers = cuckoo::DataLoader::loadKmersFromFile(argv[1]);
+
+	auto end = std::chrono::system_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Loading duration: " << elapsed.count() << "ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
+	auto mutatedKmers = generateNeKmers(numberOfTestKmers, kmers);
+	end = std::chrono::system_clock::now();
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Generate non existing Kmers duration: " << elapsed.count() << "ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
 	for (auto it = kmers->begin(); it != kmers->end(); it++) {
 		bool success = fltr->insert(*it);
 		//if (!success) break;
 	}
-	auto end = std::chrono::system_clock::now();
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	end = std::chrono::system_clock::now();
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	std::cout << "Insert duration: " << elapsed.count() << "ms" << std::endl;
 	int fp(0);
 	for (auto it = mutatedKmers->begin(); it != mutatedKmers->end(); ++it){
