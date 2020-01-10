@@ -23,3 +23,5 @@ Makefile
 src/cuckoo_filter
 
 cuckoo_filter
+
+kmers/
