@@ -11,8 +11,11 @@
 
 namespace cuckoo {
 	
-	DynamicCuckooFilter::DynamicCuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg)
-		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
+	DynamicCuckooFilter::DynamicCuckooFilter(uint32_t bucketSize,
+		uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks,
+		CuckooHashing* hashingAlg)
+		: _bucketSize(bucketSize), _bucketNumber(bucketNumber),
+		_fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 		_hashing = hashingAlg;
 
 		std::vector<CuckooFilter*>* cuckooFilters = new std::vector<CuckooFilter*>();
@@ -32,12 +35,23 @@ namespace cuckoo {
 
 	bool DynamicCuckooFilter::lookup(std::string val)
 	{
-		
+		for (auto it = cuckooFilters->begin(); it != cuckooFilters->end(); it++) {
+			if ((*it)->lookup(val) == true){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	bool DynamicCuckooFilter::remove(std::string val)
 	{
-		
+		for (auto it = cuckooFilters->begin(); it != cuckooFilters->end(); it++) {
+			if ((*it)->lookup(val) == true){
+				(*it)->remove(val);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	bool DynamicCuckooFilter::insert(std::string val)
