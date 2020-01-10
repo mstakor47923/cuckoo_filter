@@ -25,6 +25,8 @@ bool outputStats(
 
 bool benchmarkFilter(
 		const std::string inputFile,
+        int kmerLength,
+		int kmerNum,
 		const std::string outputFile,
 		cuckoo::Filter *fltr,
 		int numberOfTestKmers = 1000

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include "cuckooFilter.hh"
 #include "dynamicCuckooFilter.hh"
@@ -10,12 +11,12 @@
 
 int main(int argc, char *argv[]) {
 
-	if (argc < 2) {
-		std::cout << "Usage: cuckoo_filter [path_to_genome_file]" << std::endl;
+	if (argc < 4) {
+		std::cout << "Usage: cuckoo_filter [path_to_genome_file] [kmerlength] [kmernum]" << std::endl;
 		return 1;
 	};
 
-	if (argc > 2){
+	if (argc > 4){
 		// ------ for generating test files ------
 		std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
 			std::make_pair(10, 1000), 
@@ -35,19 +36,22 @@ int main(int argc, char *argv[]) {
 			std::make_pair(50, 1000000),
 			std::make_pair(100, 1000000),*/
 		};
+		std::cout << "Generating test files" << std::endl;
 		generateTestFiles(argv[1], fileGenInfo);
 		return 0;
 	}
 	
 	uint32_t bucketSize = 4;
-	uint32_t bucketNumber = 500;
-	uint32_t fingerprintSize = 11;
-	uint32_t maxNumberOfKicks = 5;
+	uint32_t bucketNumber = 5000;
+	uint32_t fingerprintSize = 32;
+	uint32_t maxNumberOfKicks = 500;
+	int testKmersCount = 1000;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
 	cuckoo::Filter* fltr = new cuckoo::DynamicCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
-	benchmarkFilter(argv[1], "data.csv", fltr);
+
+	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "data.csv", fltr, testKmersCount);
 	
 	delete fltr;
 	delete hashingAlg;

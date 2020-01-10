@@ -83,6 +83,8 @@ bool outputStats(
 
 bool benchmarkFilter(
 		const std::string inputFile,
+		int kmerLength,
+		int kmerNum,
 		const std::string outputFile,
 		cuckoo::Filter *fltr,
 		int numberOfTestKmers = 1000
@@ -118,7 +120,15 @@ bool benchmarkFilter(
 	std::cout << "Fp rate: " << (float)fp/numberOfTestKmers << std::endl;
 	std::cout << "Memory taken " << (double)(fltr->getCalculatedMemoryUsage() / 1024) << " kB" << std::endl;
 
-	outputStats("data.csv", 10, 100, elapsedForInsert.count(), -1, (float)fp/numberOfTestKmers);
+	outputStats(
+		"data.csv",
+		kmerLength,
+		kmerNum,
+		elapsedForInsert.count(),
+		fltr->getCalculatedMemoryUsage(),
+		(float)fp/numberOfTestKmers);
+		
+	//todo: for which averages out these numbers before outputing
 
 	delete kmers;
 
