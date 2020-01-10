@@ -1,8 +1,0 @@
-file(GLOB SOURCES
-    ${PROJECT_SOURCE_DIR}/src/*.h
-    ${PROJECT_SOURCE_DIR}/src/*.cpp
-)
-
-add_executable(cuckoo_filter ${SOURCES})
-
-target_compile_features(cuckoo_filter PRIVATE cxx_range_for)
