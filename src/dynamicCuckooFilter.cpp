@@ -18,24 +18,25 @@ namespace cuckoo {
 		_fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 		_hashing = hashingAlg;
 
-		std::vector<CuckooFilter*>* cuckooFilters = new std::vector<CuckooFilter*>();
-		cuckooFilters->push_back(new CuckooFilter(_bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks, _hashing));
+		_cuckooFilters = new std::vector<CuckooFilter*>();
+		_cuckooFilters->push_back(new CuckooFilter(_bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks, _hashing));
+
 
 		srand(time(NULL));
 	}
 
 	DynamicCuckooFilter::~DynamicCuckooFilter()
 	{
-		for (auto it = cuckooFilters->begin(); it != cuckooFilters->end(); it++) {
+		for (auto it = _cuckooFilters->begin(); it != _cuckooFilters->end(); it++) {
 			delete (*it);
 		}
 
-		delete cuckooFilters;
+		delete _cuckooFilters;
 	}
 
 	bool DynamicCuckooFilter::lookup(std::string val)
 	{
-		for (auto it = cuckooFilters->begin(); it != cuckooFilters->end(); it++) {
+		for (auto it = _cuckooFilters->begin(); it != _cuckooFilters->end(); it++) {
 			if ((*it)->lookup(val) == true){
 				return true;
 			}
@@ -45,7 +46,7 @@ namespace cuckoo {
 
 	bool DynamicCuckooFilter::remove(std::string val)
 	{
-		for (auto it = cuckooFilters->begin(); it != cuckooFilters->end(); it++) {
+		for (auto it = _cuckooFilters->begin(); it != _cuckooFilters->end(); it++) {
 			if ((*it)->lookup(val) == true){
 				(*it)->remove(val);
 				return true;
@@ -56,11 +57,13 @@ namespace cuckoo {
 
 	bool DynamicCuckooFilter::insert(std::string val)
 	{
-		CuckooFilter* currentCuckooFilter = cuckooFilters->back();
+		CuckooFilter* currentCuckooFilter = _cuckooFilters->back();
 		bool success = currentCuckooFilter->insert(val);
 		if (!success) {
-			cuckooFilters->push_back(new CuckooFilter(_bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks, _hashing));
-			return cuckooFilters->back()->insert(val);
+			_cuckooFilters->push_back(new CuckooFilter(_bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks, _hashing));
+			return _cuckooFilters->back()->insert(val);
 		}
+
+		return success;
 	}
 }

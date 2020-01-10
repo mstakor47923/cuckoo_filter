@@ -15,7 +15,7 @@ namespace cuckoo {
 	class DynamicCuckooFilter : public Filter {
 	private:
 		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
-		std::vector<CuckooFilter*>* cuckooFilters;
+		std::vector<CuckooFilter*>* _cuckooFilters;
 		CuckooHashing* _hashing;
 
 	public:

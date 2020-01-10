@@ -3,6 +3,7 @@
 #include <chrono>
 
 #include "cuckooFilter.hh"
+#include "dynamicCuckooFilter.hh"
 #include "cuckooHashing.hh"
 #include "dataLoader.hh"
 
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
 	uint32_t maxNumberOfKicks = 500;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
-	cuckoo::CuckooFilter* fltr = new cuckoo::CuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
+	cuckoo::Filter* fltr = new cuckoo::DynamicCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
 	uint16_t kSize = 10;
 	uint32_t kCount = 10000;
