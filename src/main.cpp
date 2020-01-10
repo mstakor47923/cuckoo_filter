@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
 	if (argc > 2){
 		// ------ for generating test files ------
 		std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
-		std::make_pair(100, 1000), 
-		std::make_pair(50, 1000)
+		std::make_pair(100, 100000), 
+		std::make_pair(50, 100000)
 		};
 		generateTestFiles(argv[1], fileGenInfo);
 		return 0;
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 	uint32_t bucketNumber = 2500;
 	uint32_t fingerprintSize = 11;
 	uint32_t maxNumberOfKicks = 5;
-	uint32_t numberOfTestKmers = 100000;
+	uint32_t numberOfTestKmers = 1000;
 
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
@@ -39,17 +39,28 @@ int main(int argc, char *argv[]) {
 
 	uint16_t kSize = 100;
 	uint32_t kCount = 10000;
-	auto kmers = cuckoo::DataLoader::loadKmersFromFile(argv[1]);
-	auto mutatedKmers = generateNeKmers(numberOfTestKmers, kmers);
-
 
 	auto start = std::chrono::system_clock::now();
+
+	auto kmers = cuckoo::DataLoader::loadKmersFromFile(argv[1]);
+
+	auto end = std::chrono::system_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Loading duration: " << elapsed.count() << "ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
+	auto mutatedKmers = generateNeKmers(numberOfTestKmers, kmers);
+	end = std::chrono::system_clock::now();
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Generate non existing Kmers duration: " << elapsed.count() << "ms" << std::endl;
+
+	start = std::chrono::system_clock::now();
 	for (auto it = kmers->begin(); it != kmers->end(); it++) {
 		bool success = fltr->insert(*it);
 		//if (!success) break;
 	}
-	auto end = std::chrono::system_clock::now();
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	end = std::chrono::system_clock::now();
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	std::cout << "Insert duration: " << elapsed.count() << "ms" << std::endl;
 	int fp(0);
 	for (auto it = mutatedKmers->begin(); it != mutatedKmers->end(); ++it){
