@@ -36,21 +36,21 @@ int main(int argc, char *argv[]) {
 	generateTestFiles(argv[1], fileGenInfo);
 
 	uint32_t bucketSize = 4;
-	uint32_t bucketNumber = 500;
-	uint32_t fingerprintSize = 32;
-	uint32_t maxNumberOfKicks = 500;
+	uint32_t bucketNumber = 25000;
+	uint32_t fingerprintSize = 11;
+	uint32_t maxNumberOfKicks = 5;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
 	cuckoo::Filter* fltr = new cuckoo::DynamicCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
 	uint16_t kSize = 10;
-	uint32_t kCount = 10000;
+	uint32_t kCount = 100000;
 	auto kmers = cuckoo::DataLoader::loadFromFile(argv[1], kSize, kCount);
-
+	
 	auto start = std::chrono::system_clock::now();
 	for (auto it = kmers->begin(); it != kmers->end(); it++) {
 		bool success = fltr->insert(*it);
-		if (!success) break;
+		//if (!success) break;
 	}
 	auto end = std::chrono::system_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);

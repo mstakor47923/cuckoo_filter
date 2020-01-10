@@ -40,17 +40,15 @@ namespace cuckoo {
 	{
 		uint32_t f = fingerprint(val);
 		uint32_t i = _hashing->getHash(val);
-		uint32_t j = i ^ _hashing->getHash(f);
+		uint32_t j = (i ^ _hashing->getHash(f)) % _bucketNumber;
 
-		auto bucket_i = _table->find(i);
-		auto bucket_j = _table->find(j);
+		auto bucket_i = _table->at(i);
+		auto bucket_j = _table->at(j);
 
-		if (bucket_i != _table->end() && 
-			std::find(bucket_i->second->begin(), bucket_i->second->end(), f) != bucket_i->second->end()) {
+		if (std::find(bucket_i->begin(), bucket_i->end(), f) != bucket_i->end()) {
 			return true;
 		}
-		else if (bucket_j != _table->end() && 
-				 std::find(bucket_j->second->begin(), bucket_j->second->end(), f) != bucket_j->second->end()) {
+		else if (std::find(bucket_j->begin(), bucket_j->end(), f) != bucket_j->end()) {
 			return true;
 		} else {
 			return false;
@@ -62,19 +60,17 @@ namespace cuckoo {
 	{
 		uint32_t f = fingerprint(val);
 		uint32_t i = _hashing->getHash(val);
-		uint32_t j = i ^ _hashing->getHash(f);
+		uint32_t j = (i ^ _hashing->getHash(f)) % _bucketNumber;
 
-		auto bucket_i = _table->find(i);
-		auto bucket_j = _table->find(j);
+		auto bucket_i = _table->at(i);
+		auto bucket_j = _table->at(j);
 
-		if (bucket_i != _table->end() && 
-			std::find(bucket_i->second->begin(), bucket_i->second->end(), f) != bucket_i->second->end()) {
-			bucket_i->second->erase(std::remove(bucket_i->second->begin(), bucket_i->second->end(), f), bucket_i->second->end());
+		if (std::find(bucket_i->begin(), bucket_i->end(), f) != bucket_i->end()) {
+			bucket_i->erase(std::remove(bucket_i->begin(), bucket_i->end(), f), bucket_i->end());
 			return true;
 		}
-		else if (bucket_j != _table->end() && 
-				 std::find(bucket_j->second->begin(), bucket_j->second->end(), f) != bucket_j->second->end()) {
-			bucket_j->second->erase(std::remove(bucket_j->second->begin(), bucket_j->second->end(), f), bucket_j->second->end());
+		else if (std::find(bucket_j->begin(), bucket_j->end(), f) != bucket_j->end()) {
+			bucket_j->erase(std::remove(bucket_j->begin(), bucket_j->end(), f), bucket_j->end());
 			return true;
 		} else {
 			return false;
@@ -89,39 +85,39 @@ namespace cuckoo {
 		uint32_t i1 = _hashing->getHash(val);
 		uint32_t i2 = (i1 ^ _hashing->getHash(f)) % _bucketNumber;
 
-		auto bucket1 = _table->find(i1);
-		auto bucket2 = _table->find(i2);
+		auto bucket1 = _table->at(i1);
+		auto bucket2 = _table->at(i2);
 
-		// if (bucket1 == _table->end()) {
-		// 	_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i1, new std::vector<uint32_t>()));
-		// 	bucket1 = _table->find(i1);
-		// }
-		// if (bucket2 == _table->end()) {
-		// 	_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i2, new std::vector<uint32_t>()));
-		// 	bucket2 = _table->find(i2);
-		// }
+		/*if (bucket1 == _table->end()) {
+			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i1, new std::vector<uint32_t>()));
+			bucket1 = _table->find(i1);
+		}
+		if (bucket2 == _table->end()) {
+			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i2, new std::vector<uint32_t>()));
+			bucket2 = _table->find(i2);
+		}*/
 
-		if (bucket1->second->size() < _bucketSize){
-			bucket1->second->push_back(f);
+		if (bucket1->size() < _bucketSize){
+			bucket1->push_back(f);
 			return true;
 		}
-		else if (bucket2->second->size() < _bucketSize){
-			bucket2->second->push_back(f);
+		else if (bucket2->size() < _bucketSize){
+			bucket2->push_back(f);
 			return true;
 		}
 
 		auto i = rand() % 2 ? i2 : i1;
 
 		for (uint32_t n = 0; n < _maxNumberOfKicks; n++){
-			auto bucket = _table->find(i);
-			uint32_t randIndex = rand() % bucket->second->size();
-			auto temp = bucket->second->at(randIndex);
-			bucket->second->at(randIndex) = f;
+			auto bucket = _table->at(i);
+			uint32_t randIndex = rand() % bucket->size();
+			auto temp = bucket->at(randIndex);
+			bucket->at(randIndex) = f;
 			f = temp;
 			i = (i1 ^ _hashing->getHash(f)) % _bucketNumber;
-			bucket = _table->find(i);
-			if (bucket != _table->end() && bucket->second->size() < _bucketSize){
-				bucket->second->push_back(f);
+			bucket = _table->at(i);
+			if (bucket->size() < _bucketSize){
+				bucket->push_back(f);
 				return true;
 			}
 		}
