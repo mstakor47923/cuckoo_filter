@@ -12,7 +12,7 @@ std::vector<std::string> generateTestFiles(const std::string& fromfile, const st
 	for (auto it = fileGenInfo.begin(); it != fileGenInfo.end(); it++) {
 		std::vector<std::string>* kmers = cuckoo::DataLoader::loadFromFile(fromfile, it->first, it->second);
 		std::stringstream ss;
-		ss << "/mnt/c/Users/mateo/Desktop/cuckoo-filter/" << it->first << "mer-" << it->second << ".txt";
+		ss << "./" << it->first << "mer-" << it->second << ".txt";
 		cuckoo::DataLoader::saveKmersToFile(ss.str(), kmers);
 
 		filePaths.push_back(ss.str());
@@ -29,11 +29,11 @@ int main(int argc, char *argv[]) {
 	}
 	
 	// ------ for generating test files ------
-	// std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
-	// 	std::make_pair(100, 10000), 
-	// 	std::make_pair(50, 10000)
-	// };
-	// generateTestFiles(argv[1], fileGenInfo);
+	std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
+		std::make_pair(100, 10000), 
+		std::make_pair(50, 10000)
+	};
+	generateTestFiles(argv[1], fileGenInfo);
 
 	uint32_t bucketSize = 4;
 	uint32_t bucketNumber = 500;
