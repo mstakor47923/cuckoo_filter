@@ -53,14 +53,14 @@ int main(int argc, char *argv[]) {
 	auto start = std::chrono::system_clock::now();
 	auto kmers = cuckoo::DataLoader::loadKmersFromFile(argv[1]);
 	auto end = std::chrono::system_clock::now();
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	std::cout << "Loading duration: " << elapsed.count() << "ms" << std::endl;
+	auto elapsedForLoading = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Loading duration: " << elapsedForLoading.count() << "ms" << std::endl;
 
 	start = std::chrono::system_clock::now();
 	auto mutatedKmers = generateNeKmers(numberOfTestKmers, kmers);
 	end = std::chrono::system_clock::now();
-	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	std::cout << "Generate non existing Kmers duration: " << elapsed.count() << "ms" << std::endl;
+	auto elapsedForGeneratingNeKmers = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Generate non existing Kmers duration: " << elapsedForGeneratingNeKmers.count() << "ms" << std::endl;
 
 	start = std::chrono::system_clock::now();
 	for (auto it = kmers->begin(); it != kmers->end(); it++) {
@@ -68,8 +68,9 @@ int main(int argc, char *argv[]) {
 		//if (!success) break;
 	}
 	end = std::chrono::system_clock::now();
-	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	std::cout << "Insert duration: " << elapsed.count() << "ms" << std::endl;
+	auto elapsedForInsert = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	std::cout << "Insert duration: " << elapsedForInsert.count() << "ms" << std::endl;
+
 	int fp(0);
 	for (auto it = mutatedKmers->begin(); it != mutatedKmers->end(); ++it){
 		if (fltr->lookup(*it)){
@@ -79,6 +80,8 @@ int main(int argc, char *argv[]) {
 	}
 	std::cout << "Fp rate: " << (float)fp/numberOfTestKmers << std::endl;
 	std::cout << "Memory taken " << (double)(fltr->getCalculatedMemoryUsage() / 1024) << " kB" << std::endl;
+
+	outputStats("data.csv", 10, 100, elapsedForInsert.count(), -1, fpRate);
 
 	delete fltr;
 	delete hashingAlg;

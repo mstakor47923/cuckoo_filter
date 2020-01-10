@@ -14,4 +14,12 @@ std::vector<std::string> generateTestFiles(
 
 std::vector<std::string>* generateNeKmers(int numberOfKmers, const std::vector<std::string>* kmers);
 
-#endif // !TESTING_SUITE
+bool outputStats(
+	const std::string filepath,
+    int kmerSize,
+    int numberOfKmers,
+    int timeOfExec,
+    uint64_t memoryUsed,
+    float fpRate);
+
+#endif // !TESTING_SUITE_HH
