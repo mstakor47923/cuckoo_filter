@@ -88,15 +88,6 @@ namespace cuckoo {
 		auto bucket1 = _table->at(i1);
 		auto bucket2 = _table->at(i2);
 
-		/*if (bucket1 == _table->end()) {
-			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i1, new std::vector<uint32_t>()));
-			bucket1 = _table->find(i1);
-		}
-		if (bucket2 == _table->end()) {
-			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i2, new std::vector<uint32_t>()));
-			bucket2 = _table->find(i2);
-		}*/
-
 		if (bucket1->size() < _bucketSize){
 			bucket1->push_back(f);
 			return true;
@@ -123,6 +114,13 @@ namespace cuckoo {
 		}
 
 		return false;
+	}
+
+	uint32_t CuckooFilter::getCalculatedMemoryUsage() {
+		uint32_t keySize = _table->size() * sizeof(uint32_t);
+		uint32_t valSize = _table->size() * (sizeof(uint32_t) * _bucketSize);
+
+		return keySize + valSize;
 	}
 
 	uint32_t CuckooFilter::fingerprint(std::string val) {

@@ -16,12 +16,10 @@ namespace cuckoo {
 		CuckooHashing* hashingAlg)
 		: _bucketSize(bucketSize), _bucketNumber(bucketNumber),
 		_fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
-		_hashing = hashingAlg;
 
+		_hashing = hashingAlg;
 		_cuckooFilters = new std::vector<Filter*>();
 		_cuckooFilters->push_back(new CuckooFilter(_bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks, _hashing));
-
-
 		srand(time(NULL));
 	}
 
@@ -41,6 +39,7 @@ namespace cuckoo {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -52,6 +51,7 @@ namespace cuckoo {
 				return true;
 			}
 		}
+
 		return false;
 	}
 
@@ -65,5 +65,14 @@ namespace cuckoo {
 		}
 
 		return success;
+	}
+
+	uint32_t DynamicCuckooFilter::getCalculatedMemoryUsage() {
+		uint32_t totSize = 0;
+		for (auto it = _cuckooFilters->begin(); it != _cuckooFilters->end(); it++) {
+			totSize += (*it)->getCalculatedMemoryUsage();
+		}
+
+		return totSize;
 	}
 }

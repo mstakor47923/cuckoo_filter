@@ -31,6 +31,7 @@ namespace cuckoo {
 		virtual bool lookup(std::string val);
 		virtual bool remove(std::string val);
 		virtual bool insert(std::string val);
+		virtual uint32_t getCalculatedMemoryUsage();
 	private:
 		uint32_t fingerprint(std::string val);
 	};
