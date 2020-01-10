@@ -7,10 +7,10 @@ namespace cuckoo {
 	}
 
 	uint32_t CuckooHashing::getHash(const std::string& val) {
-		return hasher(val) % (_maxHashNum + 1);
+		return hasher(val) % (_maxHashNum);
 	}
 
 	uint32_t CuckooHashing::getHash(const uint32_t val) {
-		return val % _maxHashNum;
+		return val % (_maxHashNum);
 	}
 }

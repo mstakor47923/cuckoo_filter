@@ -15,7 +15,10 @@ namespace cuckoo {
 		
 		_table = new std::map<uint32_t, std::vector<uint32_t>*>();
 		for (uint32_t i = 0; i < _bucketNumber; i++) {
-			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i, new std::vector<uint32_t>()));
+			auto vec = new std::vector<uint32_t>();
+			vec->reserve(_bucketSize);
+
+			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i, vec));
 		}
 
 		for (int i = 0; i < _fingerPrintSize; i++) {
@@ -84,19 +87,19 @@ namespace cuckoo {
 	{
 		uint32_t f = fingerprint(val);
 		uint32_t i1 = _hashing->getHash(val);
-		uint32_t i2 = i1 ^ _hashing->getHash(f);
+		uint32_t i2 = (i1 ^ _hashing->getHash(f)) % _bucketNumber;
 
 		auto bucket1 = _table->find(i1);
 		auto bucket2 = _table->find(i2);
 
-		if (bucket1 == _table->end()) {
-			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i1, new std::vector<uint32_t>()));
-			bucket1 = _table->find(i1);
-		}
-		if (bucket2 == _table->end()) {
-			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i2, new std::vector<uint32_t>()));
-			bucket2 = _table->find(i2);
-		}
+		// if (bucket1 == _table->end()) {
+		// 	_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i1, new std::vector<uint32_t>()));
+		// 	bucket1 = _table->find(i1);
+		// }
+		// if (bucket2 == _table->end()) {
+		// 	_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i2, new std::vector<uint32_t>()));
+		// 	bucket2 = _table->find(i2);
+		// }
 
 		if (bucket1->second->size() < _bucketSize){
 			bucket1->second->push_back(f);
@@ -115,7 +118,7 @@ namespace cuckoo {
 			auto temp = bucket->second->at(randIndex);
 			bucket->second->at(randIndex) = f;
 			f = temp;
-			i = i ^ _hashing->getHash(f);
+			i = (i1 ^ _hashing->getHash(f)) % _bucketNumber;
 			bucket = _table->find(i);
 			if (bucket != _table->end() && bucket->second->size() < _bucketSize){
 				bucket->second->push_back(f);
