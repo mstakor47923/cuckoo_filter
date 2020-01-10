@@ -20,7 +20,10 @@ namespace cuckoo {
 		CuckooHashing* _hashing;
 
 	public:
-		CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg);
+		CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber,
+			 		uint32_t fingerPrintSize, uint32_t maxNumberOfKicks,
+					CuckooHashing* hashingAlg
+					);
 		~CuckooFilter();
 
 		virtual bool lookup(std::string val);
