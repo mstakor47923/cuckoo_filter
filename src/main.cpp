@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 		// ------ for generating test files ------
 		std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
 			std::make_pair(10, 1000), 
-			std::make_pair(20, 1000),
+			/*std::make_pair(20, 1000),
 			std::make_pair(50, 1000),
 			std::make_pair(100, 1000),
 			std::make_pair(10, 10000), 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 			std::make_pair(10, 1000000), 
 			std::make_pair(20, 1000000),
 			std::make_pair(50, 1000000),
-			std::make_pair(100, 1000000),
+			std::make_pair(100, 1000000),*/
 		};
 		generateTestFiles(argv[1], fileGenInfo);
 		return 0;
@@ -42,22 +42,16 @@ int main(int argc, char *argv[]) {
 	
 
 	uint32_t bucketSize = 4;
-	uint32_t bucketNumber = 2500;
+	uint32_t bucketNumber = 500;
 	uint32_t fingerprintSize = 11;
 	uint32_t maxNumberOfKicks = 5;
 	uint32_t numberOfTestKmers = 1000;
 
-
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
 	cuckoo::Filter* fltr = new cuckoo::DynamicCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
-	uint16_t kSize = 100;
-	uint32_t kCount = 10000;
-
 	auto start = std::chrono::system_clock::now();
-
 	auto kmers = cuckoo::DataLoader::loadKmersFromFile(argv[1]);
-
 	auto end = std::chrono::system_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	std::cout << "Loading duration: " << elapsed.count() << "ms" << std::endl;
@@ -84,7 +78,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	std::cout << "Fp rate: " << (float)fp/numberOfTestKmers << std::endl;
-	std::cout << "Memory taken " << bucketNumber*(sizeof(uint32_t)+bucketSize*sizeof(uint32_t)) << std::endl;
+	std::cout << "Memory taken " << (double)(fltr->getCalculatedMemoryUsage() / 1024) << " kB" << std::endl;
 
 	delete fltr;
 	delete hashingAlg;
