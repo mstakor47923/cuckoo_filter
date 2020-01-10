@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <stdint.h>
 
+#include "cuckooFilter.hh"
 #include "cuckooHashing.hh"
 
 namespace cuckoo {
@@ -14,16 +15,14 @@ namespace cuckoo {
 	class DynamicCuckooFilter {
 	private:
 		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
-		std::hash<std::string> hasher;
-		std::map<uint32_t, std::vector<uint32_t>*>* _table;
+		std::vector<CuckooFilter*>* cuckooFilters;
 		CuckooHashing* _hashing;
 
 	public:
 		DynamicCuckooFilter(
 			uint32_t bucketSize, uint32_t bucketNumber,
 			uint32_t fingerPrintSize, uint32_t maxNumberOfKicks,
-			CuckooHashing* hashingAlg
-			);
+			CuckooHashing* hashingAlg);
 		~DynamicCuckooFilter();
 
 		bool lookup(std::string val);
