@@ -1,35 +1,31 @@
-#ifndef DYNAMIC_CUCKOO_FILTER_HH
-#define DYNAMIC_CUCKOO_FILTER_HH
+#ifndef EFFICIENT_CUCKOO_FILTER_HH
+#define EFFICIENT_CUCKOO_FILTER_HH
 
-#include <iostream>
-#include <map>
-#include <vector>
-#include <algorithm>
-#include <stdint.h>
+#include <cuckoofilter/cuckoofilter.h>
 
-#include "cuckooFilter.hh"
+#include "filter.hh"
 #include "cuckooHashing.hh"
 
 namespace cuckoo {
-
-	class DynamicCuckooFilter : public Filter {
+    class EfficientCuckooFilter : public Filter {
 	private:
 		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
-		CuckooHashing* _hashing;
-		std::vector<Filter*>* _cuckooFilters;
-
+        CuckooHashing* _hashing;
+		cuckoofilter::CuckooFilter<size_t, 12>* _filter;
 	public:
-		DynamicCuckooFilter(
+		EfficientCuckooFilter(
 			uint32_t bucketSize, uint32_t bucketNumber,
 			uint32_t fingerPrintSize, uint32_t maxNumberOfKicks,
 			CuckooHashing* hashingAlg);
-		~DynamicCuckooFilter();
+		~EfficientCuckooFilter();
 
 		virtual bool lookup(std::string val);
 		virtual bool remove(std::string val);
 		virtual bool insert(std::string val);
 		virtual uint32_t getCalculatedMemoryUsage();
+	private:
+		uint32_t fingerprint(std::string val);
 	};
 }
 
-#endif // !CUCKOO_FILTER_HH
+#endif

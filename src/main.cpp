@@ -3,6 +3,7 @@
 #include <string>
 
 #include "cuckooFilter.hh"
+#include "efficientCuckooFilter.hh"
 #include "dynamicCuckooFilter.hh"
 #include "cuckooHashing.hh"
 #include "dataLoader.hh"
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]) {
 	int testKmersCount = 1000;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
-	cuckoo::Filter* fltr = new cuckoo::DynamicCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
+	cuckoo::Filter* fltr = new cuckoo::EfficientCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
 
 	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "data.csv", fltr, testKmersCount);

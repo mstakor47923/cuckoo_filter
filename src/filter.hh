@@ -1,3 +1,6 @@
+#ifndef FILTER_HH
+#define FILTER_HH
+
 #include <string>
 
 namespace cuckoo {
@@ -9,3 +12,5 @@ namespace cuckoo {
             virtual uint32_t getCalculatedMemoryUsage() = 0;
     };
 }
+
+#endif
