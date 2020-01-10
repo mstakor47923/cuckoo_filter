@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
 
 	uint32_t bucketSize = 4;
 	uint32_t bucketNumber = 500;
-	uint32_t fingerprintSize = 8;
+	uint32_t fingerprintSize = 32;
 	uint32_t maxNumberOfKicks = 500;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);

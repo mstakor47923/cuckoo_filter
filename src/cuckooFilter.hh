@@ -4,6 +4,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <bitset>
 #include <algorithm>
 #include <stdint.h>
 
@@ -16,6 +17,7 @@ namespace cuckoo {
 	private:
 		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
 		std::hash<std::string> hasher;
+		std::bitset<32> _mask;
 		std::map<uint32_t, std::vector<uint32_t>*>* _table;
 		CuckooHashing* _hashing;
 

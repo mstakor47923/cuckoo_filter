@@ -12,10 +12,16 @@ namespace cuckoo {
 	
 	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg)
 		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
+		
 		_table = new std::map<uint32_t, std::vector<uint32_t>*>();
 		for (uint32_t i = 0; i < _bucketNumber; i++) {
 			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i, new std::vector<uint32_t>()));
 		}
+
+		for (int i = 0; i < _fingerPrintSize; i++) {
+			_mask.set(i, true);
+		}
+
 		_hashing = hashingAlg;
 		srand(time(NULL));
 	}
@@ -121,7 +127,8 @@ namespace cuckoo {
 	}
 
 	uint32_t CuckooFilter::fingerprint(std::string val) {
-		return hasher(val);
+		auto hashVal = hasher(val) & (uint32_t)_mask.to_ulong();
+		return hashVal;
 	}
 
 }
