@@ -18,6 +18,7 @@ std::vector<std::string> generateTestFiles(const std::string& fromfile, const st
 		cuckoo::DataLoader::saveKmersToFile(ss.str(), kmers);
 
 		filePaths.push_back(ss.str());
+        std::cout << "End with" << ss.str() << std::endl;
 	}
 
 	return filePaths;
