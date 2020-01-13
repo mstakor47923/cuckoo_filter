@@ -44,17 +44,22 @@ int main(int argc, char *argv[]) {
 	
 	uint32_t bucketSize = 4;
 	uint32_t bucketNumber = 5000;
-	uint32_t fingerprintSize = 32;
+	uint32_t fingerprintSize = 12;
 	uint32_t maxNumberOfKicks = 500;
 	int testKmersCount = 1000;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
-	cuckoo::Filter* fltr = new cuckoo::EfficientCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
+	cuckoo::Filter* fltrE = new cuckoo::EfficientCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
+	cuckoo::Filter* fltrD = new cuckoo::DynamicCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
+	std::cout << "\n---------- Efficient Cuckoo filter ----------" << std::endl;
+	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "data.csv", fltrE, testKmersCount);
 
-	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "data.csv", fltr, testKmersCount);
+	std::cout << "\n---------- Dynamic Cuckoo filter ----------" << std::endl;
+	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "data.csv", fltrD, testKmersCount);
 	
-	delete fltr;
+	delete fltrE;
+	delete fltrD;
 	delete hashingAlg;
     return 0;
 }

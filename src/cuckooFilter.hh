@@ -2,7 +2,7 @@
 #define CUCKOO_FILTER_HH
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <bitset>
 #include <algorithm>
@@ -18,7 +18,7 @@ namespace cuckoo {
 		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
 		std::hash<std::string> hasher;
 		std::bitset<32> _mask;
-		std::map<uint32_t, std::vector<uint32_t>*>* _table;
+		std::unordered_map<uint32_t, std::vector<uint32_t>*>* _table;
 		CuckooHashing* _hashing;
 
 	public:

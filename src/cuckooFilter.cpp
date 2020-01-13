@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <cstdlib>
 #include <time.h>
 #include <functional>
@@ -13,7 +13,7 @@ namespace cuckoo {
 	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg)
 		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 		
-		_table = new std::map<uint32_t, std::vector<uint32_t>*>();
+		_table = new std::unordered_map<uint32_t, std::vector<uint32_t>*>();
 		for (uint32_t i = 0; i < _bucketNumber; i++) {
 			auto vec = new std::vector<uint32_t>();
 			vec->reserve(_bucketSize);
