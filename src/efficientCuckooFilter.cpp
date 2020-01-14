@@ -19,7 +19,7 @@ namespace cuckoo {
 		_fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 
 		_hashing = hashingAlg;
-		_filter = new cuckoofilter::CuckooFilter<uint32_t, 12>(_bucketSize * _bucketNumber);
+		_filter = new cuckoofilter::CuckooFilter<uint16_t, 16>(_bucketSize * _bucketNumber);
 	}
 
 	EfficientCuckooFilter::~EfficientCuckooFilter() { }
