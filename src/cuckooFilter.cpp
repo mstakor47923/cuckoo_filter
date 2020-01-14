@@ -13,12 +13,12 @@ namespace cuckoo {
 	CuckooFilter::CuckooFilter(uint32_t bucketSize, uint32_t bucketNumber, uint32_t fingerPrintSize, uint32_t maxNumberOfKicks, CuckooHashing* hashingAlg)
 		: _bucketSize(bucketSize), _bucketNumber(bucketNumber), _fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 		
-		_table = new std::unordered_map<uint32_t, std::vector<uint32_t>*>();
+		_table = new std::vector<std::vector<uint32_t>*>(_bucketNumber, nullptr);
+		//_table = new std::unordered_map<uint32_t, std::vector<uint32_t>*>();
 		for (uint32_t i = 0; i < _bucketNumber; i++) {
 			auto vec = new std::vector<uint32_t>();
 			vec->reserve(_bucketSize);
-
-			_table->insert(std::pair<uint32_t, std::vector<uint32_t>*>(i, vec));
+			_table->at(i) = vec;
 		}
 
 		for (int i = 0; i < _fingerPrintSize; i++) {
@@ -117,10 +117,10 @@ namespace cuckoo {
 	}
 
 	uint32_t CuckooFilter::getCalculatedMemoryUsage() {
-		uint32_t keySize = _table->size() * sizeof(uint32_t);
+		//uint32_t keySize = _table->size() * sizeof(uint32_t);
 		uint32_t valSize = _table->size() * (sizeof(uint32_t) * _bucketSize);
 
-		return keySize + valSize;
+		return valSize;
 	}
 
 	uint32_t CuckooFilter::fingerprint(std::string val) {

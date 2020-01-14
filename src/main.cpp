@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
 	if (argc > 4){
 		// ------ for generating test files ------
 		std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
-			std::make_pair(10, 1000), 
+			std::make_pair(100, 100000), 
 			/*std::make_pair(20, 1000),
 			std::make_pair(50, 1000),
 			std::make_pair(100, 1000),
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	}
 	
 	uint32_t bucketSize = 4;
-	uint32_t bucketNumber = 5000;
+	uint32_t bucketNumber = 2500;
 	uint32_t fingerprintSize = 12;
 	uint32_t maxNumberOfKicks = 500;
 	int testKmersCount = 1000;
