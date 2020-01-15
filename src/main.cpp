@@ -49,16 +49,16 @@ int main(int argc, char *argv[]) {
 	int testKmersCount = 1000;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
-	//cuckoo::Filter* fltrE = new cuckoo::EfficientCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
+	cuckoo::Filter* fltrE = new cuckoo::EfficientCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 	cuckoo::Filter* fltrD = new cuckoo::CuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
-	// std::cout << "\n---------- Efficient Cuckoo filter ----------" << std::endl;
-	// benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "dataReference.csv", fltrE, testKmersCount);
+	std::cout << "\n---------- Efficient Cuckoo filter ----------" << std::endl;
+	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "dataReference.csv", fltrE, testKmersCount);
 
 	std::cout << "\n---------- Dynamic Cuckoo filter ----------" << std::endl;
 	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "dataStudent.csv", fltrD, testKmersCount);
 	
-	// delete fltrE;
+	delete fltrE;
 	delete fltrD;
 	delete hashingAlg;
     return 0;
