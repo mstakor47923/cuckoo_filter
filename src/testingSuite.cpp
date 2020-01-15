@@ -10,6 +10,7 @@
 #include <time.h>
 #include <chrono>
 #include "filter.hh"
+#include <set>
 
 std::vector<std::string> generateTestFiles(const std::string& fromfile, const std::vector<std::pair<uint32_t, uint32_t>>& fileGenInfo) {
 	std::vector<std::string> filePaths;
@@ -27,6 +28,11 @@ std::vector<std::string> generateTestFiles(const std::string& fromfile, const st
 }
 
 std::vector<std::string>* generateNeKmers(int numberOfKmers, const std::vector<std::string>* kmers){
+	std::set<std::string> *kmerSet = new std::set<std::string>();
+	for (auto it=kmers->begin(); it != kmers->end(); ++it)
+	{
+		kmerSet->insert(*it);
+	}
 	srand(time(NULL));
 	std::vector<std::string>* mutatedKmers = new std::vector<std::string>;
 	for (int i = 0; i < numberOfKmers;){
@@ -51,9 +57,14 @@ std::vector<std::string>* generateNeKmers(int numberOfKmers, const std::vector<s
 		default:
 			break;
 		}
+		if(kmerSet->find(mutatedKmer)!= kmerSet->end())
+		{
+			continue;
+		}
+		/*
 		if(std::find(kmers->begin(), kmers->end(), mutatedKmer) != kmers->end()) {
 			continue;
-		} else {
+		} */else {
 			mutatedKmers->push_back(mutatedKmer);
 			++i;
 		}
