@@ -6,6 +6,9 @@ Link to course: https://www.fer.unizg.hr/predmet/bio
 
 Usage:
   To create test files then (output is same directory as executable):
-    >> cuckoo_filter [path_to_genome_file]
+  
+    ``` cuckoo_filter [path_to_genome_file] ```
+    
   To use filter with generated test files
-    >> cuckoo_filter [path_to_test_file] [kmerlength] [kmernum] [bucketnumber]
+  
+    ``` cuckoo_filter [path_to_test_file] [kmerlength] [kmernum] [bucketnumber] ```
