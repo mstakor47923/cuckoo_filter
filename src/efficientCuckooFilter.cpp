@@ -19,7 +19,7 @@ namespace cuckoo {
 		_fingerPrintSize(fingerPrintSize), _maxNumberOfKicks(maxNumberOfKicks) {
 
 		_hashing = hashingAlg;
-		_filter = new cuckoofilter::CuckooFilter<uint16_t, 16>(_bucketSize * _bucketNumber);
+		_filter = new cuckoofilter::CuckooFilter<__int128_t, 16>(_bucketSize * _bucketNumber);
 	}
 
 	EfficientCuckooFilter::~EfficientCuckooFilter() { }
@@ -49,6 +49,10 @@ namespace cuckoo {
 	uint32_t EfficientCuckooFilter::fingerprint(std::string val) {
 		std::hash<std::string> hasher;
 		auto hashVal = hasher(val);
+		for (auto it=val.begin(); it<val.end(); ++it)
+		{
+
+		}
 		return hashVal;
 	}
 }

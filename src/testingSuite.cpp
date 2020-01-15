@@ -121,7 +121,7 @@ bool benchmarkFilter(
 	std::cout << "Memory taken " << (double)(fltr->getCalculatedMemoryUsage() / 1024) << " kB" << std::endl;
 
 	outputStats(
-		"data.csv",
+		outputFile,
 		kmerLength,
 		kmerNum,
 		elapsedForInsert.count(),

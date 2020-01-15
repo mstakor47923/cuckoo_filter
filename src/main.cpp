@@ -12,12 +12,12 @@
 
 int main(int argc, char *argv[]) {
 
-	if (argc < 4) {
-		std::cout << "Usage: cuckoo_filter [path_to_genome_file] [kmerlength] [kmernum]" << std::endl;
+	if (argc < 5) {
+		std::cout << "Usage: cuckoo_filter [path_to_genome_file] [kmerlength] [kmernum] [bucketnumber]" << std::endl;
 		return 1;
 	};
 
-	if (argc > 4){
+	if (argc > 5){
 		// ------ for generating test files ------
 		std::vector<std::pair<uint32_t, uint32_t>> fileGenInfo = {
 			std::make_pair(100, 100000), 
@@ -43,20 +43,20 @@ int main(int argc, char *argv[]) {
 	}
 	
 	uint32_t bucketSize = 4;
-	uint32_t bucketNumber = 50000;
+	uint32_t bucketNumber = std::stoi(argv[4]);
 	uint32_t fingerprintSize = 16;
 	uint32_t maxNumberOfKicks = 500;
-	int testKmersCount = 100;
+	int testKmersCount = 1000;
 
 	cuckoo::CuckooHashing* hashingAlg = new cuckoo::CuckooHashing(bucketNumber);
 	cuckoo::Filter* fltrE = new cuckoo::EfficientCuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 	cuckoo::Filter* fltrD = new cuckoo::CuckooFilter(bucketSize, bucketNumber, fingerprintSize, maxNumberOfKicks, hashingAlg);
 
 	std::cout << "\n---------- Efficient Cuckoo filter ----------" << std::endl;
-	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "data.csv", fltrE, testKmersCount);
+	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "dataReference.csv", fltrE, testKmersCount);
 
 	std::cout << "\n---------- Dynamic Cuckoo filter ----------" << std::endl;
-	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "data.csv", fltrD, testKmersCount);
+	benchmarkFilter(argv[1], std::stoi(argv[2]), std::stoi(argv[3]), "dataStudent.csv", fltrD, testKmersCount);
 	
 	delete fltrE;
 	delete fltrD;

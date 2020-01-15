@@ -11,7 +11,7 @@ namespace cuckoo {
 	private:
 		uint32_t _bucketSize, _bucketNumber, _fingerPrintSize, _maxNumberOfKicks;
         CuckooHashing* _hashing;
-		cuckoofilter::CuckooFilter<uint16_t, 16>* _filter;
+		cuckoofilter::CuckooFilter<__int128_t, 16>* _filter;
 	public:
 		EfficientCuckooFilter(
 			uint32_t bucketSize, uint32_t bucketNumber,
