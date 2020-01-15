@@ -4,6 +4,16 @@
 %%Test2 - changing bucket number
 %%Test3 - chaniging fingerprints size
 
+% %figure(5);
+% hold on;
+% bar(xdata,bpcombine3,0.125,'FaceColor',[0,0,1],...
+%                      'EdgeColor',[0,0,1]);   
+% bar(xdata,bpcombine2,0.25,'FaceColor',[0,1,0],...
+%                      'EdgeColor',[0,1,0]);  
+% bar(xdata,bpcombine1,0.4,'FaceColor',[1,0,0]);
+% set(gca, 'XTick', 1:6, 'XTickLabel', labels);
+% title('Blocking Probability vs Routing Level');
+
 data = csvread('test1.csv',1); % Read the data
 
 subplot(3,3,1)
