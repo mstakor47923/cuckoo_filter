@@ -115,7 +115,11 @@ bool benchmarkFilter(
 	start = std::chrono::system_clock::now();
 	for (auto it = kmers->begin(); it != kmers->end(); it++) {
 		bool success = fltr->insert(*it);
-		//if (!success) break;
+		if (!success)
+		{
+			std::cout << "Filter too small for the number of input kmers" << std::endl;
+			return false;
+		} 
 	}
 	end = std::chrono::system_clock::now();
 	auto elapsedForInsert = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
